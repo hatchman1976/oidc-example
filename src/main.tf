@@ -15,10 +15,18 @@ terraform {
   }
 }
 
+variable "AWS_REGION" {
+  type = string
+  default = "us-west-2"
+}
+
+variable "AWS_ROLE_ARN" {
+  type = string
+}
 provider "aws" {
-  region  = "us-west-2"
+  region  = var.AWS_REGION
   assume_role {
-    role_arn     = "arn:aws:iam::736654693886:role/oidc-example-role"
+    role_arn     = var.AWS_ROLE_ARN
     session_name = "terraform-oidc-session"
   }
 }
