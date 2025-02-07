@@ -33,13 +33,19 @@ provider "aws" {
 
 resource "aws_s3_bucket" "test_bucket" {
   bucket = "terraform-cloud-oidc-bucket"
-    # Recommended approach: Use S3 Block Public Access
+
+  tags = {
+    Environment = "Test"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "name" {
+  bucket = aws_s3_bucket.test_bucket.id
+
+  # Recommended approach: Use S3 Block Public Access
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
 
-  tags = {
-    Environment = "Test"
-  }
 }
