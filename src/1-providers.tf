@@ -10,6 +10,30 @@ resource "aws_iam_openid_connect_provider" "terraform_oidc" {
   ]
 }
 
+resource "aws_iam_policy" "allow_create_policy" {
+  name        = "AllowCreatePolicy"
+  description = "Allows the creation of IAM policies"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "iam:CreatePolicy",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "attach_create_policy_permission" {
+  role       = "oidc-example-role"
+  policy_arn = aws_iam_policy.allow_create_policy.arn
+}
+
+
 resource "aws_iam_policy" "allow_oidc_creation" {
   name        = "AllowOIDCCreationPolicy"
   description = "Allow creation of OIDC provider"
